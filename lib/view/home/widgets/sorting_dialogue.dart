@@ -1,22 +1,36 @@
 import 'package:flutter/material.dart';
 
 class SortingDialogue extends StatefulWidget {
-  const SortingDialogue({super.key});
+  final Function(String) onSelected;
+  final String currentSortOption;
+
+  const SortingDialogue({
+    super.key,
+    required this.onSelected,
+    required this.currentSortOption,
+  });
 
   @override
   State<SortingDialogue> createState() => _SortingDialogueState();
 }
 
 class _SortingDialogueState extends State<SortingDialogue> {
+  late String selectedOption;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedOption = widget.currentSortOption;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String selectedOption = 'All';
     return AlertDialog(
       title: const Text('Sort'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          RadioListTile<String>(
+        children: [
+          RadioListTile(
             title: const Text('All'),
             value: 'All',
             groupValue: selectedOption,
@@ -24,6 +38,7 @@ class _SortingDialogueState extends State<SortingDialogue> {
               setState(() {
                 selectedOption = value!;
               });
+              widget.onSelected(value!);
               Navigator.of(context).pop();
             },
           ),
@@ -35,10 +50,11 @@ class _SortingDialogueState extends State<SortingDialogue> {
               setState(() {
                 selectedOption = value!;
               });
+              widget.onSelected(value!);
               Navigator.of(context).pop();
             },
           ),
-          RadioListTile<String>(
+          RadioListTile(
             title: const Text('Age: Younger'),
             value: 'Younger',
             groupValue: selectedOption,
@@ -46,12 +62,13 @@ class _SortingDialogueState extends State<SortingDialogue> {
               setState(() {
                 selectedOption = value!;
               });
+              widget.onSelected(value!);
               Navigator.of(context).pop();
             },
           ),
         ],
       ),
-      actions: <Widget>[
+      actions: [
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();

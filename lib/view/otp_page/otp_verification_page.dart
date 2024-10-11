@@ -128,7 +128,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Home(),
+                      builder: (context) => const Home(),
                     ),
                   );
                 },

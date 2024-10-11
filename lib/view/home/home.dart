@@ -1,40 +1,20 @@
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:totalx/controller/user_controller.dart';
 import 'package:totalx/view/home/widgets/add_user_widget.dart';
 import 'package:totalx/view/home/widgets/sorting_dialogue.dart';
 
 class Home extends StatelessWidget {
-  final List<Map<String, dynamic>> users = [
-    {"name": "Martin Dokidis", "age": 34, "image": "assets/images/person.jpg"},
-    {"name": "Marilyn Rosser", "age": 34, "image": "assets/images/person.jpg"},
-    {
-      "name": "Cristofer Lipshutz",
-      "age": 34,
-      "image": "assets/images/person.jpg"
-    },
-    {"name": "Wilson Botosh", "age": 34, "image": "assets/images/person.jpg"},
-    {"name": "Anika Saris", "age": 34, "image": "assets/images/person.jpg"},
-    {"name": "Phillip Gouse", "age": 34, "image": "assets/images/person.jpg"},
-    {"name": "Wilson Bergson", "age": 34, "image": "assets/images/person.jpg"},
-  ];
-
-  Home({super.key});
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<UserController>(context, listen: false);
+    provider.getUsersAndSort("All");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Row(
-          children: [
-            Icon(Icons.location_on, color: Colors.white),
-            SizedBox(width: 5),
-            Text(
-              'Nilambur',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -50,12 +30,15 @@ class Home extends StatelessWidget {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: const TextField(
-                      decoration: InputDecoration(
+                    child: TextField(
+                      decoration: const InputDecoration(
                         hintText: 'Search by name...',
                         border: InputBorder.none,
                         icon: Icon(Icons.search, color: Colors.grey),
                       ),
+                      onChanged: (value) {
+                        provider.search(value);
+                      },
                     ),
                   ),
                 ),
@@ -64,7 +47,12 @@ class Home extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return const SortingDialogue();
+                        return SortingDialogue(
+                          currentSortOption: provider.selectedSortOption,
+                          onSelected: (sort) {
+                            provider.getUsersAndSort(sort);
+                          },
+                        );
                       },
                     );
                   },
@@ -86,31 +74,41 @@ class Home extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  final user = users[index];
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage(
-                          user['image'],
-                        ),
+              child: Consumer<UserController>(
+                builder: (context, value, child) => value.isloading == true
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView.builder(
+                        itemCount: value.searchlist.isEmpty
+                            ? value.allUsers.length
+                            : value.searchlist.length,
+                        itemBuilder: (context, index) {
+                          final user = value.searchlist.isEmpty
+                              ? value.allUsers[index]
+                              : value.searchlist[index];
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: ListTile(
+                              leading: const CircleAvatar(
+                                radius: 30,
+                                backgroundImage:
+                                    AssetImage('assets/images/totalx.png'),
+                              ),
+                              title: Text(
+                                user.name.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                "Age: ${user.age}",
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      title: Text(
-                        user['name'],
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text(
-                        "Age: ${user['age']}",
-                      ),
-                    ),
-                  );
-                },
               ),
             ),
           ],
@@ -126,7 +124,7 @@ class Home extends StatelessWidget {
                 padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
-                child: AddUserWidget(),
+                child: const AddUserWidget(),
               );
             },
           );
