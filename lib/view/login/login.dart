@@ -31,7 +31,13 @@ class LoginPage extends StatelessWidget {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              TextField(
+              TextFormField(
+                // validator: (value) {
+                //   if (value!.isEmpty) {
+                //     return "Please enter Phone Number";
+                //   }
+                //   return null;
+                // },
                 keyboardType: TextInputType.phone,
                 controller: provider.phoneController,
                 decoration: InputDecoration(

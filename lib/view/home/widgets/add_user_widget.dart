@@ -1,28 +1,54 @@
-import 'dart:developer';
+// ignore_for_file: library_private_types_in_public_api
 
+import 'dart:developer';
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:totalx/controller/user_controller.dart';
 import 'package:totalx/model/user_model.dart';
 
-class AddUserWidget extends StatelessWidget {
+class AddUserWidget extends StatefulWidget {
   const AddUserWidget({super.key});
+
+  @override
+  _AddUserWidgetState createState() => _AddUserWidgetState();
+}
+
+class _AddUserWidgetState extends State<AddUserWidget> {
+  final formKey = GlobalKey<FormState>();
+  final FocusNode _nameFocusNode = FocusNode();
+  final FocusNode _ageFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _nameFocusNode.dispose();
+    _ageFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<UserController>(context, listen: false);
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
+    return Form(
+      key: formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: const Icon(EneftyIcons.profile_2user_outline),
-              onPressed: () =>
-                  provider.pickImageFromGallery(source: ImageSource.gallery),
+            Consumer<UserController>(
+              builder: (context, value, child) => GestureDetector(
+                onTap: () => value.pickImageFromGallery(),
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: value.pickedImage != null
+                      ? FileImage(value.pickedImage!)
+                      : null,
+                  child: value.pickedImage == null
+                      ? const Icon(EneftyIcons.profile_2user_outline)
+                      : null,
+                ),
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -30,21 +56,43 @@ class AddUserWidget extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
+              focusNode: _nameFocusNode,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Please enter Name";
+                }
+                return null;
+              },
               controller: provider.nameController,
               decoration: const InputDecoration(
                 labelText: 'Name',
                 border: OutlineInputBorder(),
               ),
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (_) {
+                FocusScope.of(context).requestFocus(_ageFocusNode);
+              },
             ),
             const SizedBox(height: 16),
-            TextField(
+            TextFormField(
+              focusNode: _ageFocusNode,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Please enter Age";
+                }
+                return null;
+              },
               controller: provider.ageController,
               decoration: const InputDecoration(
                 labelText: 'Age',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
+              onFieldSubmitted: (_) {
+                FocusScope.of(context).unfocus();
+              },
             ),
             const SizedBox(height: 16),
             Row(
@@ -83,8 +131,10 @@ class AddUserWidget extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    addData(context);
-                    Navigator.pop(context);
+                    if (formKey.currentState!.validate()) {
+                      addData(context);
+                      Navigator.pop(context);
+                    }
                   },
                   child: const Text(
                     'Save',
@@ -101,11 +151,12 @@ class AddUserWidget extends StatelessWidget {
 
   addData(context) async {
     final getProvider = Provider.of<UserController>(context, listen: false);
-
     final user = UserModel(
       age: int.parse(getProvider.ageController.text),
       name: getProvider.nameController.text,
+      image: getProvider.uploadedImageUrl,
     );
+    getProvider.uploadImage();
     getProvider.addUser(user);
     log("data added in add user widget");
   }

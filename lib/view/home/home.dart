@@ -92,10 +92,13 @@ class Home extends StatelessWidget {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: ListTile(
-                              leading: const CircleAvatar(
+                              leading: CircleAvatar(
                                 radius: 30,
-                                backgroundImage:
-                                    AssetImage('assets/images/totalx.png'),
+                                backgroundImage: NetworkImage(
+                                    user.image != null ? user.image! : ""),
+                                child: user.image == null
+                                    ? const Icon(EneftyIcons.people_bold)
+                                    : null,
                               ),
                               title: Text(
                                 user.name.toString(),
@@ -118,6 +121,7 @@ class Home extends StatelessWidget {
         shape: const CircleBorder(),
         onPressed: () {
           showModalBottomSheet(
+            isScrollControlled: true,
             context: context,
             builder: (context) {
               return Padding(

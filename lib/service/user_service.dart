@@ -13,9 +13,8 @@ class UserService {
   late CollectionReference<UserModel> user;
   Reference storage = FirebaseStorage.instance.ref();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  final ImagePicker imagePicker = ImagePicker();
 
-  List<String> downloadUrls = [];
+  String downloadUrl = "";
 
   UserService() {
     user = firestore.collection(collection).withConverter<UserModel>(
@@ -63,7 +62,7 @@ class UserService {
       Reference storageReference = storage.child('uploads/$fileName');
       UploadTask uploadTask = storageReference.putFile(imageFile);
       TaskSnapshot snapshot = await uploadTask;
-      String downloadUrl = await snapshot.ref.getDownloadURL();
+      downloadUrl = await snapshot.ref.getDownloadURL();
       log('Image uploaded: $downloadUrl');
       return downloadUrl;
     } catch (e) {

@@ -2,7 +2,9 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:totalx/model/user_model.dart';
 import 'package:totalx/service/user_service.dart';
 
@@ -14,11 +16,10 @@ class UserController extends ChangeNotifier {
   List<UserModel> allUsers = [];
   List<UserModel> searchlist = [];
   File? pickedImage;
-  String? _uploadedImageUrl;
+  String? uploadedImageUrl;
   bool isloading = false;
+  final ImagePicker imagePicker = ImagePicker();
   String selectedSortOption = 'All';
-
-  String? get uploadedImageUrl => _uploadedImageUrl;
 
   addUser(UserModel data) async {
     await userService.adduser(data);
@@ -59,23 +60,33 @@ class UserController extends ChangeNotifier {
     ageController.clear();
   }
 
-  Future<void> pickImageFromGallery({required source}) async {
-    pickedImage = await userService.getImage(source: source);
-    if (pickedImage != null) {
+  Future<void> pickImageFromGallery() async {
+    final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      pickedImage = File(pickedFile.path);
       notifyListeners();
     }
   }
 
   Future<void> uploadImage() async {
-    if (pickedImage != null) {
-      _uploadedImageUrl = await userService.uploadImageToFirebase(pickedImage!);
+    try {
+      final storageRef = FirebaseStorage.instance.ref();
+      final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      final imageRef = storageRef.child("user_images/$fileName.jpg");
+      final uploadTask = imageRef.putFile(pickedImage!);
+      final snapshot = await uploadTask;
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      uploadedImageUrl = downloadUrl;
       notifyListeners();
+      log("Image uploaded successfully. Download URL: $downloadUrl");
+    } catch (e) {
+      log("Error uploading image: $e");
     }
   }
 
   void resetImage() {
     pickedImage = null;
-    _uploadedImageUrl = null;
+    uploadedImageUrl = null;
     notifyListeners();
   }
 
