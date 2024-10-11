@@ -1,0 +1,162 @@
+{
+  "project_info": {
+    "project_number": "1076141888612",
+    "project_id": "kayla-f4bf0",
+    "storage_bucket": "kayla-f4bf0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076141888612:android:19681cf7e20156f35cbb71",
+        "android_client_info": {
+          "package_name": "com.bookapp.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIQtilshQFoC4opNCL6-AL1bHFyPsq-CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076141888612:android:de52c3194f9012fa5cbb71",
+        "android_client_info": {
+          "package_name": "com.example.bookapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIQtilshQFoC4opNCL6-AL1bHFyPsq-CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076141888612:android:4175b94666b2c4a75cbb71",
+        "android_client_info": {
+          "package_name": "com.example.chatapp_yt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIQtilshQFoC4opNCL6-AL1bHFyPsq-CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076141888612:android:3dc71ed1cff0e22b5cbb71",
+        "android_client_info": {
+          "package_name": "com.example.kayla"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIQtilshQFoC4opNCL6-AL1bHFyPsq-CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076141888612:android:95ef3d608aa2c3765cbb71",
+        "android_client_info": {
+          "package_name": "com.example.mimo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIQtilshQFoC4opNCL6-AL1bHFyPsq-CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076141888612:android:35a2cb1269af287f5cbb71",
+        "android_client_info": {
+          "package_name": "com.example.notes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIQtilshQFoC4opNCL6-AL1bHFyPsq-CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076141888612:android:0f70170a85fc02875cbb71",
+        "android_client_info": {
+          "package_name": "com.example.totalx"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIQtilshQFoC4opNCL6-AL1bHFyPsq-CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1076141888612:android:66d5c940490e6f225cbb71",
+        "android_client_info": {
+          "package_name": "com.example.userlist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIQtilshQFoC4opNCL6-AL1bHFyPsq-CM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
