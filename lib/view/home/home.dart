@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:enefty_icons/enefty_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,8 +7,19 @@ import 'package:totalx/controller/user_controller.dart';
 import 'package:totalx/view/home/widgets/add_user_widget.dart';
 import 'package:totalx/view/home/widgets/sorting_dialogue.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    Provider.of<UserController>(context, listen: false).getProduct();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,29 +100,36 @@ class Home extends StatelessWidget {
                           final user = value.searchlist.isEmpty
                               ? value.allUsers[index]
                               : value.searchlist[index];
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(
-                                    user.image != null ? user.image! : ""),
-                                child: user.image == null
-                                    ? const Icon(EneftyIcons.people_bold)
-                                    : null,
+                          if (index < value.allUsers.length) {
+                            log("loading existing user ${user.name}");
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
                               ),
-                              title: Text(
-                                user.name.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage: NetworkImage(
+                                      user.image != null ? user.image! : ""),
+                                  child: user.image == null
+                                      ? const Icon(EneftyIcons.people_bold)
+                                      : null,
+                                ),
+                                title: Text(
+                                  "${user.name}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(
+                                  "Age: ${user.age}",
+                                ),
                               ),
-                              subtitle: Text(
-                                "Age: ${user.age}",
-                              ),
-                            ),
-                          );
+                            );
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
                         },
                       ),
               ),
